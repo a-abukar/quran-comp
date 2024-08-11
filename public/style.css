@@ -1,0 +1,307 @@
+/* Root Variables for Global Theming */
+:root {
+  --primary-color: #0d6efd;
+  --primary-hover-color: #0a58ca;
+  --background-gradient: linear-gradient(135deg, #3b82f6, #9333ea);
+  --background-gradient-dark: linear-gradient(135deg, #1e3a8a, #7e22ce);
+  --card-background: #ffffff;
+  --card-background-dark: #1f2937;
+  --text-color: #333;
+  --text-color-dark: #f4f4f4;
+  --heading-font: 'Nunito', sans-serif;
+  --body-font: 'Nunito', sans-serif;
+  --border-radius: 10px;
+  --box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  --max-container-width: 90%;
+  --max-container-height: 90%;
+}
+
+/* Reset and Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--body-font);
+  background: var(--background-gradient);
+  color: var(--text-color);
+  line-height: 1.6;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  overflow: hidden;
+  padding: 10px;
+  transition: background 0.3s, color 0.3s;
+}
+
+body.dark-mode {
+  background: var(--background-gradient-dark);
+  color: var(--text-color-dark);
+}
+
+/* Container */
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: var(--max-container-width);
+  max-width: 600px;
+  max-height: var(--max-container-height);
+  padding: 40px 30px;
+  background: var(--card-background);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  animation: fadeIn 0.8s ease-out;
+  overflow-y: auto;
+  transition: background 0.3s, color 0.3s;
+}
+
+body.dark-mode .container {
+  background: var(--card-background-dark);
+}
+
+/* Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.title {
+  font-size: 32px;
+  color: var(--primary-color);
+  font-weight: 700;
+}
+
+.theme-toggle {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+.theme-toggle:hover {
+  transform: rotate(20deg);
+}
+
+/* Input Section */
+.input-section {
+  margin-bottom: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.input-section label {
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--primary-color);
+}
+
+.input-field {
+  width: 100%;
+  padding: 12px 15px;
+  border: 2px solid #ddd;
+  border-radius: var(--border-radius);
+  font-size: 16px;
+  transition: border-color 0.3s;
+}
+
+.input-field:focus {
+  border-color: var(--primary-color);
+  outline: none;
+}
+
+.btn {
+  padding: 15px;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: 700;
+  text-transform: uppercase;
+  transition: background-color 0.3s;
+}
+
+.btn:hover {
+  background-color: var(--primary-hover-color);
+}
+
+/* Output Section */
+.output-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.verse-content {
+  background-color: #f9f9f9;
+  padding: 20px;
+  border: 2px solid #ddd;
+  border-radius: var(--border-radius);
+  font-size: 18px;
+  line-height: 1.8;
+  color: #444;
+  box-shadow: var(--box-shadow);
+  animation: slideUp 0.5s ease-out;
+}
+
+.verse-content p {
+  margin-bottom: 10px;
+}
+
+.verse-details {
+  background-color: #eef2ff;
+  padding: 15px;
+  border-radius: var(--border-radius);
+  font-size: 16px;
+  color: #555;
+  box-shadow: var(--box-shadow);
+  animation: slideUp 0.7s ease-out;
+}
+
+.extra-controls {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.extra-btn {
+  flex: 1;
+  padding: 10px;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s;
+}
+
+.extra-btn:hover {
+  background-color: var(--primary-hover-color);
+}
+
+.bookmark-list {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #f1f5f9;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  font-size: 14px;
+  color: #333;
+  display: none; /* Hidden by default */
+}
+
+.quiz-section {
+  display: none;
+  margin-top: 20px;
+}
+
+.quiz-feedback {
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 14px;
+  color: #888;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+  .container {
+      padding: 20px;
+  }
+
+  .title {
+      font-size: 28px;
+  }
+
+  .input-field, .btn {
+      font-size: 14px;
+  }
+
+  .verse-content, .verse-details {
+      font-size: 16px;
+  }
+}
+
+/* Container styling for verse content with navigation arrows */
+.verse-content-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.arrow-btn {
+  padding: 10px 15px;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-size: 20px;
+  transition: background-color 0.3s;
+}
+
+.arrow-btn:hover {
+  background-color: var(--primary-hover-color);
+}
+
+.verse-content {
+  flex: 1;
+  margin: 0 10px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border: 2px solid #ddd;
+  border-radius: var(--border-radius);
+  font-size: 18px;
+  line-height: 1.8;
+  color: #444;
+  box-shadow: var(--box-shadow);
+  animation: slideUp 0.5s ease-out;
+}
+
+/* Adjusting quiz option buttons */
+.quiz-option {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+  text-align: left;
+}
+
+.quiz-option:hover {
+  background-color: var(--primary-hover-color);
+}

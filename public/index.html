@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Qur'an Competition App</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div id="app" class="container">
+        <header class="header">
+            <h1 class="title">Qur'an Competition App</h1>
+            <button id="theme-toggle" class="theme-toggle">🌙</button>
+        </header>
+        <main>
+            <section id="input-section" class="input-section">
+                <label for="chapters">Select Juz (1-30):</label>
+                <input type="text" id="chapters" class="input-field" placeholder="E.g., 1-5, 10, 15-20">
+                <button id="generate-btn" class="btn">Generate Question</button>
+            </section>
+            <section id="output-section" class="output-section">
+                <div id="verse-content-wrapper" class="verse-content-wrapper">
+                    <button id="prev-btn" class="arrow-btn">←</button>
+                    <div id="verse-content" class="verse-content"></div>
+                    <button id="next-btn" class="arrow-btn">→</button>
+                </div>
+                <div id="verse-details" class="verse-details"></div>
+                <div id="extra-controls" class="extra-controls">
+                    <button id="bookmark-btn" class="extra-btn">⭐ Bookmark</button>
+                    <button id="audio-btn" class="extra-btn">🔊 Play Recitation</button>
+                    <button id="quiz-btn" class="extra-btn">📝 Quiz Mode</button>
+                    <button id="share-btn" class="extra-btn">📤 Share</button>
+                </div>
+                <div id="quiz-section" class="quiz-section" style="display: none;">
+                    <p id="quiz-question"></p>
+                    <div id="quiz-options"></div>
+                    <p id="quiz-feedback" class="quiz-feedback"></p>
+                </div>
+                <div id="bookmark-list" class="bookmark-list"></div>
+            </section>
+        </main>
+        <footer class="footer">
+            <p>&copy; 2024 Qur'an Competition App</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

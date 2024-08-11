@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
           return;
       }
 
-      fetch(`/api/verse?chapters=${juzNumber}&chapter=${chapter}&verse=${verse}`)
+      fetch(`/verse?chapters=${juzNumber}&chapter=${chapter}&verse=${verse}`)
           .then(response => response.json())
           .then(data => {
               if (data.error) throw new Error(data.error);
@@ -137,7 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function fetchVerseByChapters(chaptersInput) {
       const juzNumber = chaptersInput; // assuming chaptersInput is the Juz number or range directly
       console.log('Fetching verse by chapters:', juzNumber); // Debugging log
-      fetch(`/api/verse?chapters=${juzNumber}`)
+      fetch(`/verse?chapters=${juzNumber}`)
           .then(response => response.json())
           .then(data => {
               if (data.error) {

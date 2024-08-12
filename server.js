@@ -38,7 +38,7 @@ const juzMapping = {
     30: [{ surah: 78, start: 1, end: 40 }, { surah: 79, start: 1, end: 46 }, { surah: 80, start: 1, end: 42 }, { surah: 81, start: 1, end: 29 }, { surah: 82, start: 1, end: 19 }, { surah: 83, start: 1, end: 36 }, { surah: 84, start: 1, end: 25 }, { surah: 85, start: 1, end: 22 }]
 };
 
-app.use(express.static(path.join(__dirname, 'public'))); 
+app.use(express.static(path.join(__dirname, 'public')));
 
 function parseJuzInput(juzInput) {
     if (!juzInput) {

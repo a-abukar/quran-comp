@@ -81,13 +81,13 @@ app.get('/api/verse', (req, res) => {
         const juzNumbers = parseJuzInput(chapters);
         console.log('Parsed Juz:', juzNumbers);
 
-        fs.readFile(path.join(__dirname, 'data', 'quran.json'), 'utf8', (err, quranData) => {
+        fs.readFile(path.join(__dirname, '../data', 'quran.json'), 'utf8', (err, quranData) => {
             if (err) {
                 console.error('Error reading Quran data:', err);
                 return res.status(500).json({ error: 'Failed to load Quran data' });
             }
 
-            fs.readFile(path.join(__dirname, 'data', 'translate.json'), 'utf8', (err, translateData) => {
+            fs.readFile(path.join(__dirname, '../data', 'translate.json'), 'utf8', (err, translateData) => {
                 if (err) {
                     console.error('Error reading translation data:', err);
                     return res.status(500).json({ error: 'Failed to load translation data' });

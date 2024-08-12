@@ -38,8 +38,6 @@ const juzMapping = {
     30: [{ surah: 78, start: 1, end: 40 }, { surah: 79, start: 1, end: 46 }, { surah: 80, start: 1, end: 42 }, { surah: 81, start: 1, end: 29 }, { surah: 82, start: 1, end: 19 }, { surah: 83, start: 1, end: 36 }, { surah: 84, start: 1, end: 25 }, { surah: 85, start: 1, end: 22 }]
 };
 
-app.use(express.static(path.join(__dirname, 'public')));
-
 function parseJuzInput(juzInput) {
     if (!juzInput) {
         throw new Error("Juz input is undefined or null.");
@@ -54,7 +52,6 @@ function parseJuzInput(juzInput) {
     }).flat();
 }
 
-// Helper function to get verse by chapter and verse
 function getVerseByChapterAndVerse(quranData, chapter, verse) {
     const surah = quranData[chapter];
     if (!surah) {
@@ -63,101 +60,77 @@ function getVerseByChapterAndVerse(quranData, chapter, verse) {
     return surah.find(v => v.verse === verse);
 }
 
-// API endpoint to get a verse
-app.get('/api/verse', (req, res) => {
+export default function handler(req, res) {
     try {
         const chapters = req.query.chapters;
         const chapter = parseInt(req.query.chapter, 10);
         const verse = parseInt(req.query.verse, 10);
-
-        console.log('Received chapters query parameter:', chapters);
-        console.log('Received chapter:', chapter);
-        console.log('Received verse:', verse);
 
         if (!chapters) {
             throw new Error('Chapters query parameter is missing or invalid.');
         }
 
         const juzNumbers = parseJuzInput(chapters);
-        console.log('Parsed Juz:', juzNumbers);
 
-        fs.readFile(path.join(__dirname, '../data', 'quran.json'), 'utf8', (err, quranData) => {
-            if (err) {
-                console.error('Error reading Quran data:', err);
-                return res.status(500).json({ error: 'Failed to load Quran data' });
-            }
+        const quranData = fs.readFileSync(path.join(process.cwd(), 'data', 'quran.json'), 'utf8');
+        const translateData = fs.readFileSync(path.join(process.cwd(), 'data', 'translate.json'), 'utf8');
 
-            fs.readFile(path.join(__dirname, '../data', 'translate.json'), 'utf8', (err, translateData) => {
-                if (err) {
-                    console.error('Error reading translation data:', err);
-                    return res.status(500).json({ error: 'Failed to load translation data' });
-                }
+        const quran = JSON.parse(quranData);
+        const translation = JSON.parse(translateData);
 
-                const quran = JSON.parse(quranData);
-                const translation = JSON.parse(translateData);
+        let verseData = null;
 
-                let verseData = null;
+        if (chapter && verse) {
+            verseData = getVerseByChapterAndVerse(quran, chapter, verse);
+        }
 
-                if (chapter && verse) {
-                    // Get a specific verse
-                    verseData = getVerseByChapterAndVerse(quran, chapter, verse);
-                }
+        if (!verseData) {
+            let selectedVerses = [];
 
-                if (!verseData) {
-                    let selectedVerses = [];
+            juzNumbers.forEach(juz => {
+                if (juzMapping[juz]) {
+                    juzMapping[juz].forEach(range => {
+                        const surahVerses = quran[range.surah];
+                        const surahTranslation = translation.find(surah => surah.id === range.surah);
 
-                    juzNumbers.forEach(juz => {
-                        if (juzMapping[juz]) {
-                            juzMapping[juz].forEach(range => {
-                                const surahVerses = quran[range.surah];
-                                const surahTranslation = translation.find(surah => surah.id === range.surah);
-
-                                if (surahVerses && surahTranslation) {
-                                    surahVerses.filter(verse => verse.verse >= range.start && verse.verse <= range.end)
-                                        .forEach(verse => {
-                                            const verseTranslation = surahTranslation.verses.find(v => v.id === verse.verse);
-                                            selectedVerses.push({
-                                                chapter: verse.chapter,
-                                                verse: verse.verse,
-                                                text: verse.text,
-                                                translation: verseTranslation ? verseTranslation.translation : "No translation available"
-                                            });
-                                        });
-                                }
-                            });
+                        if (surahVerses && surahTranslation) {
+                            surahVerses.filter(verse => verse.verse >= range.start && verse.verse <= range.end)
+                                .forEach(verse => {
+                                    const verseTranslation = surahTranslation.verses.find(v => v.id === verse.verse);
+                                    selectedVerses.push({
+                                        chapter: verse.chapter,
+                                        verse: verse.verse,
+                                        text: verse.text,
+                                        translation: verseTranslation ? verseTranslation.translation : "No translation available"
+                                    });
+                                });
                         }
                     });
-
-                    if (selectedVerses.length === 0) {
-                        console.log('No verses found for selected Juz:', juzNumbers);
-                        return res.status(404).json({ error: 'No verses found for the selected Juz' });
-                    }
-
-                    verseData = selectedVerses[Math.floor(Math.random() * selectedVerses.length)];
                 }
-
-                if (!verseData) {
-                    return res.status(404).json({ error: 'Verse not found' });
-                }
-
-                // Add translation to the verse data
-                const surahTranslation = translation.find(surah => surah.id === verseData.chapter);
-                const verseTranslation = surahTranslation?.verses.find(v => v.id === verseData.verse);
-
-                res.json({
-                    chapter: verseData.chapter,
-                    verse: verseData.verse,
-                    text: verseData.text,
-                    translation: verseTranslation ? verseTranslation.translation : "No translation available"
-                });
             });
+
+            if (selectedVerses.length === 0) {
+                return res.status(404).json({ error: 'No verses found for the selected Juz' });
+            }
+
+            verseData = selectedVerses[Math.floor(Math.random() * selectedVerses.length)];
+        }
+
+        if (!verseData) {
+            return res.status(404).json({ error: 'Verse not found' });
+        }
+
+        const surahTranslation = translation.find(surah => surah.id === verseData.chapter);
+        const verseTranslation = surahTranslation?.verses.find(v => v.id === verseData.verse);
+
+        res.status(200).json({
+            chapter: verseData.chapter,
+            verse: verseData.verse,
+            text: verseData.text,
+            translation: verseTranslation ? verseTranslation.translation : "No translation available"
         });
     } catch (error) {
         console.error('Error processing request:', error.message);
         res.status(400).json({ error: 'Invalid input' });
     }
-});
-
-app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
-});
+}
